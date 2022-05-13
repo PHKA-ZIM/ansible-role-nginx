@@ -1,0 +1,14 @@
+---
+- name: Stop nginx
+  become: true
+  ansible.builtin.service:
+    name: nginx
+    state: stopped
+
+- name: Remove repositories for nginx and uninstall it
+  ansible.builtin.import_role:  
+    name: ansible-role-installer
+  vars:
+    installer_repositories: "{{ nginx_repositories }}"
+    installer_packages: "{{ nginx_packages }}"
+    installer_uninstall: true

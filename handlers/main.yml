@@ -1,0 +1,13 @@
+---
+- name: test configuration
+  become: true
+  ansible.builtin.command:
+    cmd: "nginx -t"
+  register: result
+  failed_when: "'failed' in result.stdout"
+
+- name: restart nginx
+  become: true
+  ansible.builtin.service:
+    name: nginx
+    state: restarted

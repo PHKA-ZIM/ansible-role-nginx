@@ -1,0 +1,8 @@
+---
+- name: Install nginx
+  ansible.builtin.include_tasks: install.yml
+  when: nginx_uninstall == false
+
+- name: Uninstall nginx
+  ansible.builtin.include_tasks: uninstall.yml
+  when: nginx_uninstall == true
