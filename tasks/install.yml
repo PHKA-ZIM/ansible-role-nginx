@@ -63,7 +63,7 @@
     src: "{{ nginx_sites_available_path }}/{{ item | basename }}"
     state: link
   with_fileglob:
-    - "{{ nginx_local_path }}/*"
+    - "{{ nginx_local_sites_available_path }}/*"
   notify:
     - test configuration
     - restart nginx
