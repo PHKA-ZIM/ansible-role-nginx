@@ -49,9 +49,9 @@
   ansible.builtin.copy:
     src: "{{ item }}"
     dest: "{{ nginx_sites_available_path }}"
-    owner: "{{ nginx_sites_available_owner }}"
-    group: "{{ nginx_sites_available_group }}"
-    mode: "{{ nginx_sites_available_mode }}"
+    owner: "{{ nginx_file_owner }}"
+    group: "{{ nginx_file_group }}"
+    mode: "{{ nginx_file_mode }}"
     force: true
   with_fileglob:
     - "{{ nginx_local_sites_available_path }}/*"
