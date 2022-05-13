@@ -3,9 +3,9 @@ nginx_repositories:
   - ppa:ondrej/nginx
 
 nginx_path: /etc/nginx/
-nginx_sites_available_path: "{{ nginx_path }}"/sites-available/
-nginx_sites_enabled_path: "{{ nginx_path }}"/sites-enabled/
-nginx_snippets_path: "{{ nginx_path }}"/snippets/
+nginx_sites_available_path: "{{ nginx_path }}/sites-available/"
+nginx_sites_enabled_path: "{{ nginx_path }}/sites-enabled/"
+nginx_snippets_path: "{{ nginx_path }}/snippets/"
 nginx_file_owner: root
 nginx_file_group: root
 nginx_file_mode: "644"
