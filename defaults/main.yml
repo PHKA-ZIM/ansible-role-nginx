@@ -1,7 +1,7 @@
 ---
 nginx_packages:
   - nginx
-nginx_local_config_file: ./nginx.conf
-nginx_local_snippets_path: ./snippets/
-nginx_local_sites_available_path: ./sites-available/
+nginx_local_config_file: ./nginx/nginx.conf
+nginx_local_snippets_path: ./nginx/snippets/
+nginx_local_sites_available_path: ./nginx/sites-available/
 nginx_uninstall: false
