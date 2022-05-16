@@ -6,6 +6,17 @@
     installer_repositories: "{{ nginx_repositories }}"
     installer_packages: "{{ nginx_packages }}"
 
+- name: Download dhparam
+  when: nginx_dhparam_url is defined && nginx_dhparam_url | length > 0
+  become: true
+  ansible.builtin.get_url:
+    url: '{{ nginx_dhparam_url }}'
+    dest: "/etc/ssl/dhparam"
+    owner: "{{ nginx_file_owner }}"
+    group: "{{ nginx_file_group }}"
+    mode: "{{ nginx_file_mode }}"
+    force: true
+
 - name: Copy nginx snippets files
   become: true
   ansible.builtin.copy:
