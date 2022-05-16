@@ -7,7 +7,7 @@
     installer_packages: "{{ nginx_packages }}"
 
 - name: Download dhparam
-  when: nginx_dhparam_url is defined && nginx_dhparam_url | length > 0
+  when: nginx_dhparam_url is defined and nginx_dhparam_url | length > 0
   become: true
   ansible.builtin.get_url:
     url: '{{ nginx_dhparam_url }}'
