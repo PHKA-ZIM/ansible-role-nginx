@@ -70,3 +70,10 @@
   notify:
     - test configuration
     - restart nginx
+
+- name: Ensure nginx is started and enabled on boot
+  become: true
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: "{{ nginx_enabled_on_startup }}"
