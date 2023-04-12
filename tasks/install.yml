@@ -1,4 +1,12 @@
 ---
+- name: Add apt key
+  ansible.builtin.import_role:
+    name: ansible-role-aptkey
+  vars:
+    aptkey_url: nginx_key_url
+    aptkey_name: nginx_key_name
+    aptkey_path: nginx_key_path
+
 - name: Add repositories for nginx and install it
   ansible.builtin.import_role:  
     name: ansible-role-installer

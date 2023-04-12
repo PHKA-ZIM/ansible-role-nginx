@@ -12,3 +12,11 @@
     installer_repositories: "{{ nginx_repositories }}"
     installer_packages: "{{ nginx_packages }}"
     installer_uninstall: true
+
+- name: Remove apt key
+  ansible.builtin.import_role:
+    name: ansible-role-aptkey
+  vars:
+    aptkey_name: nginx_key_name
+    aptkey_path: nginx_key_path
+    aptkey_uninstall: true

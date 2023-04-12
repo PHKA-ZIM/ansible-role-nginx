@@ -1,6 +1,11 @@
 ---
+nginx_key_url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x4f4ea0aae5267a6c
+nginx_key_name: ppa_ondrej_nginx.gpg
+nginx_key_path: /etc/apt/keyrings/
+
 nginx_repositories:
-  - ppa:ondrej/nginx
+  - deb [signed-by={{ nginx_key_path }}{{ nginx_key_name }}] https://ppa.launchpadcontent.net/ondrej/nginx/ubuntu {{ ansible_distribution_release }} main 
+  - deb-src [signed-by={{ nginx_key_path }}{{ nginx_key_name }}] https://ppa.launchpadcontent.net/ondrej/nginx/ubuntu {{ ansible_distribution_release }} main 
 
 nginx_path: /etc/nginx/
 nginx_sites_available_path: "{{ nginx_path }}/sites-available/"
