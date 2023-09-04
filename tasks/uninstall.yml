@@ -1,17 +1,20 @@
 ---
-- name: Stop nginx
+- name: Ensure that packages are uninstalled
   become: true
-  ansible.builtin.service:
-    name: nginx
-    state: stopped
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    autoremove: "{{ nginx_autoremove }}"
+    purge: "{{ nginx_purge }}"
+    state: absent
+  loop: "{{ nginx_packages }}"
 
-- name: Remove repositories for nginx and uninstall it
-  ansible.builtin.import_role:  
-    name: ansible-role-installer
-  vars:
-    installer_repositories: "{{ nginx_repositories }}"
-    installer_packages: "{{ nginx_packages }}"
-    installer_uninstall: true
+- name: Ensure that repositories are uninstalled
+  become: true
+  ansible.builtin.apt_repository:
+    repo: "{{ item }}"
+    update_cache: true
+    state: absent
+  loop: "{{ nginx_repositories }}"
 
 - name: Remove apt key
   ansible.builtin.import_role:

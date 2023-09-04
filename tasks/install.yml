@@ -7,81 +7,18 @@
     aptkey_name: "{{ nginx_key_name }}"
     aptkey_path: "{{ nginx_key_path }}"
 
-- name: Add repositories for nginx and install it
-  ansible.builtin.import_role:  
-    name: ansible-role-installer
-  vars:
-    installer_repositories: "{{ nginx_repositories }}"
-    installer_packages: "{{ nginx_packages }}"
-
-- name: Download dhparam
-  when: nginx_dhparam_url is defined and nginx_dhparam_url | length > 0
+- name: Ensure that repositories are installed
   become: true
-  ansible.builtin.get_url:
-    url: '{{ nginx_dhparam_url }}'
-    dest: "/etc/ssl/dhparam"
-    mode: "{{ nginx_file_mode }}"
-    force: true
+  ansible.builtin.apt_repository:
+    repo: "{{ item }}"
+    update_cache: true
+    state: present
+  loop: "{{ nginx_repositories }}"
 
-- name: Copy nginx snippets files
+- name: Ensure that packages are installed
   become: true
-  ansible.builtin.copy:
-    src: "{{ item }}"
-    dest: "{{ nginx_snippets_path }}"
-    mode: "{{ nginx_file_mode }}"
-    force: true
-  with_fileglob:
-    - "{{ nginx_local_snippets_path }}/*"
-
-- name: Copy nginx config file
-  become: true
-  ansible.builtin.copy:
-    src: "{{ item }}"
-    dest: "{{ nginx_path }}/{{ item | basename }}"
-    mode: "{{ nginx_file_mode }}"
-    force: true
-  with_first_found:
-    - files:
-        - "{{ nginx_local_config_file }}"
-      skip: true
-  notify:
-    - test configuration
-    - restart nginx
-
-- name: Disable default site
-  become: true
-  ansible.builtin.file:
-    path: "{{ nginx_sites_enabled_path }}/default"
-    state: absent
-  notify:
-    - test configuration
-    - restart nginx
-
-- name: Copy nginx sites configuration files
-  become: true
-  ansible.builtin.copy:
-    src: "{{ item }}"
-    dest: "{{ nginx_sites_available_path }}"
-    mode: "{{ nginx_file_mode }}"
-    force: true
-  with_fileglob:
-    - "{{ nginx_local_sites_available_path }}/*"
-
-- name: Enable sites
-  become: true
-  ansible.builtin.file:
-    path: "{{ nginx_sites_enabled_path }}/{{ item | basename }}"
-    src: "{{ nginx_sites_available_path }}/{{ item | basename }}"
-    state: link
-  with_fileglob:
-    - "{{ nginx_local_sites_available_path }}/*"
-  notify:
-    - test configuration
-    - restart nginx
-
-- name: Ensure nginx is started and enabled on boot
-  become: true
-  ansible.builtin.service:
-    name: nginx
-    state: started
-    enabled: "{{ nginx_enabled_on_startup }}"
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    update_cache: true
+    state: present
+  loop: "{{ nginx_packages }}"

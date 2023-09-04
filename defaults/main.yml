@@ -6,4 +6,7 @@ nginx_local_snippets_path: ./nginx/snippets/
 nginx_local_sites_available_path: ./nginx/sites-available/
 nginx_dhparam_url: https://ssl-config.mozilla.org/ffdhe2048.txt
 nginx_enabled_on_startup: true
+
 nginx_uninstall: false
+nginx_autoremove: true
+nginx_purge: true

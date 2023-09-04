@@ -1,0 +1,72 @@
+---
+- name: Download dhparam
+  when: nginx_dhparam_url is defined and nginx_dhparam_url | length > 0
+  become: true
+  ansible.builtin.get_url:
+    url: '{{ nginx_dhparam_url }}'
+    dest: "/etc/ssl/dhparam"
+    mode: "{{ nginx_file_mode }}"
+    force: true
+
+- name: Copy nginx snippets files
+  become: true
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ nginx_snippets_path }}"
+    mode: "{{ nginx_file_mode }}"
+    force: true
+  with_fileglob:
+    - "{{ nginx_local_snippets_path }}/*"
+
+- name: Copy nginx config file
+  become: true
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ nginx_path }}/{{ item | basename }}"
+    mode: "{{ nginx_file_mode }}"
+    force: true
+  with_first_found:
+    - files:
+        - "{{ nginx_local_config_file }}"
+      skip: true
+  notify:
+    - test configuration
+    - restart nginx
+
+- name: Disable default site
+  become: true
+  ansible.builtin.file:
+    path: "{{ nginx_sites_enabled_path }}/default"
+    state: absent
+  notify:
+    - test configuration
+    - restart nginx
+
+- name: Copy nginx sites configuration files
+  become: true
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "{{ nginx_sites_available_path }}"
+    mode: "{{ nginx_file_mode }}"
+    force: true
+  with_fileglob:
+    - "{{ nginx_local_sites_available_path }}/*"
+
+- name: Enable sites
+  become: true
+  ansible.builtin.file:
+    path: "{{ nginx_sites_enabled_path }}/{{ item | basename }}"
+    src: "{{ nginx_sites_available_path }}/{{ item | basename }}"
+    state: link
+  with_fileglob:
+    - "{{ nginx_local_sites_available_path }}/*"
+  notify:
+    - test configuration
+    - restart nginx
+
+- name: Ensure nginx is started and enabled on boot
+  become: true
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: "{{ nginx_enabled_on_startup }}"

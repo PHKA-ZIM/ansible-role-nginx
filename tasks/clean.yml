@@ -1,0 +1,6 @@
+---
+- name: Stop nginx
+  become: true
+  ansible.builtin.service:
+    name: nginx
+    state: stopped
