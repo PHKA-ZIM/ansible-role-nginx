@@ -17,6 +17,9 @@
     force: true
   with_fileglob:
     - "{{ nginx_local_snippets_path }}/*"
+  notify:
+    - test configuration
+    - restart nginx
 
 - name: Copy nginx config file
   become: true
