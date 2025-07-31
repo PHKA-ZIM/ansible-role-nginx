@@ -1,6 +1,6 @@
 ---
 nginx_key_url: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x4f4ea0aae5267a6c
-nginx_key_name: ppa_ondrej_nginx.gpg
+nginx_key_name: ppa_ondrej_nginx.asc
 nginx_key_path: /etc/apt/keyrings/
 
 nginx_repositories:
