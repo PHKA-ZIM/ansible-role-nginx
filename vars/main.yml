@@ -4,8 +4,8 @@ nginx_key_name: nginx-archive-keyring.asc
 nginx_key_path: /etc/apt/keyrings/
 
 nginx_repositories:
-  - "deb [signed-by={{ nginx_key_path }}{{ nginx_key_name }}] https://nginx.org/packages/ubuntu {{ ansible_facts['distribution_release'] }} main"
-  - "deb-src [signed-by={{ nginx_key_path }}{{ nginx_key_name }}] https://nginx.org/packages/ubuntu {{ ansible_facts['distribution_release'] }} main"
+  - "deb [signed-by={{ nginx_key_path }}{{ nginx_key_name }}] https://nginx.org/packages/ubuntu {{ ansible_facts['distribution_release'] }} nginx"
+  - "deb-src [signed-by={{ nginx_key_path }}{{ nginx_key_name }}] https://nginx.org/packages/ubuntu {{ ansible_facts['distribution_release'] }} nginx"
 
 nginx_path: /etc/nginx/
 nginx_sites_available_path: "{{ nginx_path }}/sites-available/"
